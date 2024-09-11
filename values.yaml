@@ -1,0 +1,14 @@
+server:
+  service:
+    type: LoadBalancer
+  extraArgs:
+    - --insecure
+repoServer:
+  volumes:
+    - name: argocd-repo-server-tmp
+      emptyDir: {}
+controller:
+  replicas: 2
+  logLevel: debug
+  metrics:
+    enabled: true
