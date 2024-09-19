@@ -1,8 +1,8 @@
 # Create GKE Cluster
 resource "google_container_cluster" "primary" {
   name               = var.cluster_name
-  location           = var.region
-  initial_node_count = 3
+  location           = var.zone
+  initial_node_count = 2
 
   node_config {
     machine_type = var.machine_type
@@ -27,10 +27,10 @@ resource "helm_release" "argocd" {
   repository = "https://argoproj.github.io/argo-helm"
   chart      = "argo-cd"
   namespace  = kubernetes_namespace.argocd.metadata[0].name
-  version    = "5.23.2" 
+  version    = "5.23.2"
 
   values = [file("${path.module}/values.yaml")
   ]
-  
+
   depends_on = [kubernetes_namespace.argocd]
 }

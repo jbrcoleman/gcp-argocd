@@ -9,6 +9,12 @@ variable "region" {
   default     = "us-central1"
 }
 
+variable "zone" {
+  description = "A deployment area for Google Cloud resources within a region"
+  type        = string
+  default     = "us-central1-f"
+}
+
 variable "cluster_name" {
   description = "The name of the GKE cluster."
   type        = string
