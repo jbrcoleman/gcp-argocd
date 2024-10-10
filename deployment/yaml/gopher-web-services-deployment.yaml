@@ -17,4 +17,4 @@ spec:
       - name: web-service
         image: jbrcoleman/gopher-web-service:1.0.0
         ports:
-        - containerPort: 80
+        - containerPort: 8080

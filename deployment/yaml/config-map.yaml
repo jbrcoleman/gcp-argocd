@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: external-ip-config
+  namespace: python-service
+data:
+  EXTERNAL_IP: ""

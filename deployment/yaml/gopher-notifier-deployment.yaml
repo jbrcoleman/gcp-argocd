@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-service-deployment
+  namespace: python-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: python-service
+  template:
+    metadata:
+      labels:
+        app: python-service
+    spec:
+      initContainers:
+      - name: init-fetch-external-ip
+        image: bitnami/kubectl:latest
+        command:
+        - /bin/sh
+        - -c
+        - |
+          while [ -z "$EXTERNAL_IP" ]; do
+            EXTERNAL_IP=$(kubectl get svc web-service -n web-service -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+            [ -z "$EXTERNAL_IP" ] && sleep 5
+          done
+          echo "$EXTERNAL_IP" > /etc/config/external-ip.env
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+      containers:
+      - name: python-service-container
+        image: jbrcoleman/gopher-notifier:1.0.4
+        ports:
+        - containerPort: 80
+        command: ["/bin/sh", "-c", "export EXTERNAL_IP=$(cat /etc/config/external-ip.env) && python main.py"]
+        env:
+        - name: EXTERNAL_IP
+          valueFrom:
+            configMapKeyRef:
+              name: external-ip-config
+              key: EXTERNAL_IP
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+      volumes:
+      - name: config-volume
+        emptyDir: {}
