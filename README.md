@@ -50,12 +50,7 @@ This is a copy of the Gopher-Notifier service with its YAML files stored in a se
     ```
     terraform apply --var-file=tfvars/dev.tfvars
     ```
-3. Deploy the Gopher-Notifier service:
-    ```sh
-    kubectl apply -f ./gopher-notifier/deployment.yaml
-    kubectl apply -f ./gopher-notifier/service.yaml
-    ```
-4. Connect to GKE cluster
+3. Connect to GKE cluster
     ```
     gcloud container clusters get-credentials <cluser-name> --zone <zone>
     ```
